@@ -5,6 +5,9 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,6 +27,14 @@ jobs:
           [ -n "$SETTINGS" ] || { echo "ما لقيت settings.gradle.kts"; exit 1; }
           echo "PROJECT_DIR=$(dirname "$SETTINGS")" >> "$GITHUB_ENV"
 
+      - name: Add google-services.json
+        run: |
+          if [ -f google-services.json ]; then
+            cp google-services.json "$PROJECT_DIR/app/google-services.json"
+          elif [ ! -f "$PROJECT_DIR/app/google-services.json" ]; then
+            echo "ما لقيت google-services.json. ارفعو في أول الريبو."; exit 1
+          fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -37,7 +48,17 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: gradle assembleDebug --no-daemon
 
+      - name: Rename APK
+        run: cp "$PROJECT_DIR"/app/build/outputs/apk/debug/*.apk NileLostFound.apk
+
       - uses: actions/upload-artifact@v4
         with:
-          name: UniLostAndFound-debug-apk
-          path: ${{ env.PROJECT_DIR }}/app/build/outputs/apk/debug/*.apk
+          name: NileLostFound-apk
+          path: NileLostFound.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: مفقودات جامعة النيل v${{ github.run_number }}
+          files: NileLostFound.apk
