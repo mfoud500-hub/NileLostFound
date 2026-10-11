@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "139951278756",
+    "project_id": "comexampleunilostandfound",
+    "storage_bucket": "comexampleunilostandfound.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139951278756:android:a0e89c397e8cb4592a7431",
+        "android_client_info": {
+          "package_name": "com.example.unilostandfound"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM-NnSB-YbVVna0VvV5l1JZmkZvMFXCgI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
