@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مفقودات جامعة النيل</title>
+<style>
+:root{--blue:#1565C0;--dark:#0D47A1;--mango:#FFD966;--light:#FFF4CC;--ink:#12263F}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif;background:#F5F9FF;color:var(--ink)}
+header{background:linear-gradient(var(--blue),var(--dark));color:#fff;text-align:center;padding:40px 20px 80px;border-radius:0 0 32px 32px}
+.logo{width:84px;height:84px;margin:0 auto 12px;background:var(--mango);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:44px}
+h1{margin:0 0 6px;font-size:26px}
+header p{margin:0;color:var(--mango)}
+main{max-width:520px;margin:-48px auto 30px;padding:0 16px}
+.card{background:#fff;border-radius:22px;padding:20px;box-shadow:0 4px 18px rgba(21,101,192,.15);margin-bottom:14px}
+.btn{display:block;text-align:center;text-decoration:none;font-weight:bold;font-size:18px;padding:16px;border-radius:16px;background:var(--blue);color:#fff}
+.btn.y{background:var(--mango);color:var(--ink);margin-top:10px;font-size:16px;border:0;width:100%;cursor:pointer}
+.ver{text-align:center;color:#5F6F82;font-size:13px;margin-top:10px}
+h2{margin:0 0 10px;color:var(--dark);font-size:18px}
+ol{margin:0;padding-inline-start:22px;line-height:2}
+.tip{background:var(--light);border:1px solid var(--mango)}
+ul{margin:0;padding-inline-start:22px;line-height:2}
+footer{text-align:center;color:#5F6F82;font-size:12px;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🎓</div>
+  <h1>مفقودات جامعة النيل</h1>
+  <p>ضاع ليك شي؟ أو لقيت شي؟ نحنا هنا</p>
+</header>
+<main>
+  <div class="card">
+    <a id="dl" class="btn" href="#">⬇️ نزّل التطبيق (Android)</a>
+    <button class="btn y" id="share">📤 شارك الرابط مع أصحابك</button>
+    <div class="ver" id="ver">جاري تحميل معلومات النسخة...</div>
+  </div>
+  <div class="card">
+    <h2>كيف أثبّت التطبيق؟</h2>
+    <ol>
+      <li>اضغط زر <b>نزّل التطبيق</b> فوق.</li>
+      <li>افتح الملف بعد ما ينزل.</li>
+      <li>لو طلعت رسالة "غير مسموح"، اضغط <b>الإعدادات</b> واسمح بالتثبيت من المتصفح.</li>
+      <li>ارجع وثبّت، وافتح التطبيق وسجّل حسابك بالرقم الجامعي.</li>
+    </ol>
+  </div>
+  <div class="card tip">
+    <h2>التطبيق بيعمل شنو؟</h2>
+    <ul>
+      <li>بلّغ عن أي حاجة ضاعت منك أو لقيتها.</li>
+      <li>كل طلاب الجامعة بيشوفوا البلاغات.</li>
+      <li>دردش مع الناشر أو اتصل بيهو أو كلّمو واتساب.</li>
+      <li>بعد ما تستلم غرضك اضغط <b>تأكيد الاستلام</b>.</li>
+    </ul>
+  </div>
+  <footer>جامعة النيل 🇸🇩</footer>
+</main>
+<script>
+const OWNER_OVERRIDE = "", REPO_OVERRIDE = "";
+
+const owner = OWNER_OVERRIDE || location.hostname.split(".")[0];
+const repo  = REPO_OVERRIDE  || location.pathname.split("/").filter(Boolean)[0];
+const base  = "https://github.com/" + owner + "/" + repo;
+const apk   = base + "/releases/latest/download/NileLostFound.apk";
+
+document.getElementById("dl").href = apk;
+
+fetch("https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest")
+  .then(r => r.json())
+  .then(d => {
+    const a = (d.assets || [])[0];
+    const mb = a ? (a.size / 1048576).toFixed(1) + " MB" : "";
+    const dt = d.published_at ? new Date(d.published_at).toLocaleDateString("ar") : "";
+    document.getElementById("ver").textContent = "آخر نسخة: " + (d.tag_name || "") + (dt ? " • " + dt : "") + (mb ? " • " + mb : "");
+  })
+  .catch(() => { document.getElementById("ver").textContent = "اضغط الزر لتحميل آخر نسخة"; });
+
+document.getElementById("share").onclick = () => {
+  const data = { title: "مفقودات جامعة النيل", text: "نزّل تطبيق مفقودات جامعة النيل:", url: location.href };
+  if (navigator.share) navigator.share(data).catch(() => {});
+  else navigator.clipboard.writeText(location.href).then(() => alert("اتنسخ الرابط ✅"));
+};
+</script>
+</body>
+</html>
